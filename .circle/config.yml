@@ -17,7 +17,7 @@ jobs:
             docker build -t drakontia/coat-web:$CIRCLE_SHA
 
       - run:
-          name: Docker run
+          name: Nginx Test
           command: |
             docker run -d -p 8080:80 --name coat-web drakontia/coat-web
             docker exec coat-web curl --retry 10 --retry-connrefused http://localhost:8080
