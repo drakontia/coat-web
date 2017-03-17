@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: alpine:3.5
+        environment:
+          APP_SERVER: http://localhost:3000
+    working_directory: /opt/nginx
+    steps:
+      - checkout
+
+      - setup_docker_engine
+
+      - run:
+          name: Docker build
+          command: |
+            docker build -t drakontia/coat-web:$CIRCLE_SHA
+
+      - run:
+          name: Docker run
+          command: |
+            docker run -d -p 8080:80 --name coat-web drakontia/coat-web
+            docker exec coat-web curl --retry 10 --retry-connrefused http://localhost:8080
